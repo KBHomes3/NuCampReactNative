@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Animated } from 'react-native';
+import { View, Text, Animated } from 'react-native';
 import { Card } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
@@ -48,7 +48,7 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            scale: new Animated.Value(0)
+            scaleValue: new Animated.Value(0)
         };
     }
 
@@ -57,7 +57,7 @@ class Home extends Component {
             this.state.scaleValue,
             {
                 toValue: 1,
-                duration: 1500
+                duration: 2000
             }
         ).start();
     }
