@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, FlatList, Modal, Button, StyleSheet, Alert, PanResponder } from 'react-native';
+import { Text, View, ScrollView, FlatList, Modal, Button, StyleSheet, Alert, PanResponder, Share } from 'react-native';
 import { Card, Icon, Rating, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
@@ -51,7 +51,8 @@ function RenderComments({comments}) {
 }
 
 function RenderCampsite(props) {
-   
+    const recognizeComment = ({dx}) => (dx < 200 ) ? true: false;
+
     const {campsite} = props;
     const recognizeDrag = ({dx}) => (dx < -200) ? true: false;
     const view = React.createRef();
@@ -83,9 +84,23 @@ function RenderCampsite(props) {
                     { cancelable: false }
                 );
             }
+            
+            else if (recognizeComment(gestureState)) {
+                props.showModal()
+            }
             return true;
         }
     });
+
+    const shareCampsite = (title, message, url) => {
+        Share.share({
+            title,
+            message: `${title}: ${message} ${url}`,
+            url
+        },{
+            dialogTitle: 'Share ' + title
+        });
+    };
     
     if (campsite) {
         return (
@@ -121,6 +136,15 @@ function RenderCampsite(props) {
                             reverse
                             onPress={() => props.showModal()} 
                                 
+                        />
+                        <Icon
+                            name={'share'}
+                            type='font-awesome'
+                            color='#5637DD'
+                            style={styles.cardItem}
+                            raised
+                            reversed
+                            onPress={() => shareCampsite(campsite.name, campsite.description, baseUrl + campsite.image)} 
                         />
                     </View>
                 </Card>
